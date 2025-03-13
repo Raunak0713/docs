@@ -1,0 +1,64 @@
+---
+title: "Installation"  
+description: "Get Sendify up and running in no time, because who likes waiting?"  
+---
+
+### **Step 1: Install Sendify**  
+Pop this bad boy into your terminal and let the magic happen:  
+
+<CodeGroup>
+
+  ```bash npm
+  npm i sendify
+  ```
+
+</CodeGroup>
+
+### **Step 2: Generate Your API Keys**  
+You’ll need some keys to unlock the Sendify kingdom 🔑. Grab yours here : [Generate Keys](https://sendify.100xbuild.com/dashboard/projects)  
+
+### **Step 3: Set Up Environment Variables**  
+Create a `.env` file at the root of your project and toss in your shiny new keys: (yes, right there) 
+
+```env
+SENDIFY_API_KEY=<your-api-key>
+NEXT_PUBLIC_SENDIFY_PROJECT_ID=<your-project-id>
+```
+
+### **Step 4**: Create an Instance of Sendify
+Create a `lib` folder and depending on your sanity level add a `sendify.js` or `sendify.ts` file inside. If you're the TypeScript type (the overachiever), here's how you do it:
+
+<CodeGroup>
+
+
+```ts TS
+// lib/sendify.ts (because you like pain, I mean, Type Safety)
+
+import { Sendify } from "sendify";
+
+const sendify = new Sendify(
+  process.env.SENDIFY_API_KEY as string,
+  process.env.NEXT_PUBLIC_SENDIFY_PROJECT_ID as string
+);
+
+export { sendify };
+```
+
+```js JS
+// lib/sendify.js
+
+import { Sendify } from "sendify";
+
+const sendify = new Sendify(
+  process.env.SENDIFY_API_KEY,
+  process.env.NEXT_PUBLIC_SENDIFY_PROJECT_ID
+);
+
+export { sendify };
+```
+
+</CodeGroup>
+
+---
+
+🎉 **Wow, look at you!** You actually set up Sendify. Gold star! ⭐ Or not—I'm not here to validate your life choices. Now go spam some notifications like the absolute legend you are.

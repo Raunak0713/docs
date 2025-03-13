@@ -16,8 +16,9 @@
             "group": "Get Started",
             "pages": [
               "introduction",
-              "quickstart",
-              "development"
+              "installation",
+              "component",
+              "send-notification"
             ]
           },
           {

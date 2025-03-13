@@ -1,0 +1,72 @@
+---
+title: "Send Notifications"
+description: "How to send notifications with Sendify (because what’s the point of a notification system if you don’t send any?)."
+---
+
+## Sending Notifications (Because That’s the Whole Point, Right?)
+
+Oh, so you actually want to **send** notifications? Wow, what a revolutionary concept. Luckily for you, it’s so easy even a goldfish with Wi-Fi could do it. Let’s break it down.
+
+## Before You Start: API Keys & Unique User IDs Matter!
+
+First things first—do you have your **API keys** set up? No? Then what are you doing here? Notifications don’t send themselves. Check the [Installation Guide](/installation) before wasting any more of your precious time.
+
+Next, let’s talk **user IDs**. And I cannot stress this enough—**they must be unique**. If you think using "user1" for every single person is a genius idea, congratulations, you just created the world's worst notification system. Use an email, a UUID, or literally anything that **distinguishes one user from another**. A random string? Sure, as long as it’s actually unique per user.
+
+## Server (a.k.a. The Brains Behind It All)
+
+```ts
+import { sendify } from "sendify";
+
+// Imagine this is inside an API route where an auction is created
+
+await sendify.sendNotifications(
+  ["user123", "user456"], // Array of user IDs to notify (you know, unique ones)
+  "A new auction just went live!", // Notification content (make it interesting, maybe?)
+  "Check it out", // Button text (optional, but who doesn’t like buttons?)
+  "https://yourapp.com/auctions/123" // Button URL (optional, unless you want users to guess where to go)
+);
+```
+
+## Client (a.k.a. Where Users See The Magic)
+
+<CodeGroup>
+```tsx TSX
+import { NotificationFeed } from "sendify";
+
+const UserNotifications = ({ userId }: { userId: string }) => {
+  return (
+    <div>
+      <NotificationFeed userId={userId} />
+    </div>
+  );
+};
+
+export default UserNotifications;
+```
+
+```jsx JSX
+import { NotificationFeed } from "sendify";
+
+const UserNotifications = ({ userId }) => {
+  return (
+    <div>
+      <NotificationFeed userId={userId} />
+    </div>
+  );
+};
+
+export default UserNotifications;
+```
+</CodeGroup>
+
+## Breakdown of `sendify.sendNotifications()` (Because Details Matter, Apparently)
+
+1. **First argument (`userIds`)** – Who’s getting the notification? This must be an array. One user? `["user123"]`. Multiple users? `["user1", "user2"]`. **Make sure these are unique! I will not repeat this again. Maybe on the next page. Who knows?**
+2. **Second argument (`content`)** – The actual message. Keep it short and sweet. Nobody wants to read a novel in their notifications.
+3. **Third argument (`buttonText` - optional)** – If you want a button, this is the text. If not, then just pretend this argument doesn’t exist.
+4. **Fourth argument (`buttonUrl` - optional)** – Where does the button take users? Your app? A cat video? It’s up to you.
+
+## That’s It.
+
+You now know how to send notifications like a pro. No unnecessary bloat, no overcomplicated nonsense—just clean, real-time notifications. Now go forth and notify the world. 🚀 (Or don’t. I’m not your boss.)

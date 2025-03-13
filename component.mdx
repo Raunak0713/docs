@@ -1,0 +1,49 @@
+---
+title: "Component"
+description: "Everything you need to know about Sendify’s component (because reading docs is fun, right?)."
+---
+
+## The Essentials
+
+Alright, listen up. Sendify is all about making real-time notifications stupidly simple. To achieve that, we give you **one** main component: `NotificationFeed`. That’s it. No fluff, no nonsense.
+
+## `NotificationFeed`
+
+This bad boy does all the heavy lifting. It fetches notifications, listens for real-time updates, and makes you look like a genius.
+
+## How to Use It
+
+### First, do you even have your API keys set up?
+
+If not, what are you even doing here? Go back and actually follow the [installation guide](https://docs.sendify.100xbuild.com/installation). I’ll wait. (But seriously, you need them for this to work, genius.)
+
+### Now, let’s use `NotificationFeed` like a pro.
+
+```tsx
+import { NotificationFeed } from "sendify";
+
+const Page = () => {
+  return (
+    <div>
+      <NotificationFeed userId="unique-user-id" />
+    </div>
+  );
+};
+
+export default Page;
+```
+
+### About `userId` (a.k.a. The Most Important Thing Here)
+
+Listen up, because this is crucial. The `userId` **MUST BE UNIQUE** per user. That means:
+
+- An **email**? Sure.
+- A **database ID**? Perfect.
+- A completely random string you pulled out of thin air? Sure, as long as it's actually unique per user. Don't make it weird.
+- The same `userId` for all users? Absolutely not. Don’t do that. Ever.
+
+If you mess this up, your users will start seeing each other’s notifications. Unless you’re building a chaotic social experiment, that’s probably **not** what you want.
+
+## That’s It.
+
+You now know how to use Sendify’s one and only component. No unnecessary bloat, no overcomplicated nonsense—just clean, real-time notifications. Now go forth and notify the world. 🚀
