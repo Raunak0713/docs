@@ -1,0 +1,78 @@
+---
+title: "Example 2 - Event Management"
+description: "Just to prove Sendify doesn’t care what tech stack you use. It just works."
+---
+
+## Example 2: Different Tech, Same Smooth Notifications
+
+Oh, you didn’t like Prisma? Fine. Here’s another example where we throw in a completely different tech stack to prove Sendify plays nice with everything.
+
+Let’s say we’re running an event platform, and we want to notify users when a new event is live. This time, we’re using MongoDB and Express, because why not?
+
+## Server (a.k.a. Your Backend of Choice)
+
+```ts
+// server/createEvent.ts
+import { sendify } from "sendify";
+import { MongoClient } from "mongodb";
+
+const client = new MongoClient(process.env.MONGO_URI);
+const db = client.db("eventDB");
+
+env.SENDIFY_API_KEY || throw new Error("Missing SENDIFY_API_KEY. This isn't optional, you know.");
+
+const createEvent = async (title: string, category: string) => {
+  await client.connect();
+
+  // Store event in MongoDB
+  const event = await db.collection("events").insertOne({ title, category });
+
+  // Fetch users who like this category
+  const interestedUsers = await db.collection("users").find({ interests: category }).toArray();
+
+  const userIds = interestedUsers.map(user => user.email);
+  
+  if (!userIds.length) {
+    console.log("No interested users found. Guess no one cares about this event.");
+    return;
+  }
+
+  await sendify.sendNotifications(
+    userIds, // Notify only relevant users
+    `New event: ${title}!`, // Content
+    "Join now", // Button text (optional, but why not?)
+    `https://yourapp.com/events/${event.insertedId}` // Dynamic event link
+  );
+};
+```
+
+## Client (a.k.a. Frontend Doing Its Job)
+
+```tsx
+// components/UserNotifications.tsx
+import { NotificationFeed } from "sendify";
+
+const UserNotifications = ({ userId }: { userId: string }) => {
+  if (!userId) {
+    throw new Error("Missing userId. You sure you know who your users are?");
+  }
+
+  return (
+    <div>
+      <NotificationFeed userId={userId} />
+    </div>
+  );
+};
+
+export default UserNotifications;
+```
+
+## What’s Different Here?
+
+1. **We used MongoDB instead of Prisma** – Because variety is the spice of life.
+2. **Express instead of some Next.js API route** – Just to mix things up.
+3. **Same Sendify integration** – Because it just works. No matter what backend, database, or questionable tech choices you make.
+
+## Final Words
+
+So yeah, Sendify doesn’t care what you use. As long as your code runs and your users have actual unique IDs, notifications will work flawlessly. 🚀

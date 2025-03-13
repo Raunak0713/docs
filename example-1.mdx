@@ -1,0 +1,79 @@
+---
+title: "Example 1 - Auction System"
+description: "A completely hypothetical auction system that somehow notifies the right users (magic, basically)."
+---
+
+## Example 1: The Auction Notification System (Because Why Not?)
+
+So, let’s pretend we’re building an auction system where users can bid on overpriced electronics they don’t need. Naturally, we want to notify only those users who **actually care** about electronics. Not Bob, who only collects rare stamps. Sorry, Bob.
+
+And before you ask—yes, this example uses Prisma. No, you don’t have to use Prisma. You could use PostgreSQL, Firebase, or an old shoebox with user data written on sticky notes. Whatever works for you.
+
+## Server (a.k.a. The Puppet Master)
+
+```ts
+// server/createAuction.ts
+import { sendify } from "sendify";
+import { db } from "./prismaClient"; // Or whatever database you’re using
+
+env.SENDIFY_API_KEY || throw new Error("Missing SENDIFY_API_KEY in .env file. What did you expect, telepathic notifications?");
+
+const createAuction = async (title: string, category: string) => {
+  // Store auction in the database
+  const auction = await db.auction.create({
+    data: { title, category },
+  });
+
+  // Fetch users who like this category (pretend this is advanced AI when it’s really just a WHERE clause)
+  const interestedUsers = await db.user.findMany({
+    where: { interests: { has: category } },
+    select: { email: true },
+  });
+
+  const userIds = interestedUsers.map(user => user.email);
+  
+  if (!userIds.length) {
+    console.log("No interested users found. Guess no one cares about this auction.");
+    return;
+  }
+
+  await sendify.sendNotifications(
+    userIds, // Notify only relevant users
+    `New auction live: ${title}!`, // Content
+    "Place a bid", // Button text (optional, but why not?)
+    `https://yourapp.com/auctions/${auction.id}` // Dynamic auction link
+  );
+};
+```
+
+## Client (a.k.a. Where Users Get Hyped)
+
+```tsx
+// components/UserNotifications.tsx
+import { NotificationFeed } from "sendify";
+
+const UserNotifications = ({ userId }: { userId: string }) => {
+  if (!userId) {
+    throw new Error("Missing userId. Are we just sending notifications into the abyss?");
+  }
+
+  return (
+    <div>
+      <NotificationFeed userId={userId} />
+    </div>
+  );
+};
+
+export default UserNotifications;
+```
+
+## What Just Happened?
+
+1. **We created an auction** – Because capitalism.
+2. **We found users who like the auction’s category** – No point notifying stamp collectors about gaming PCs.
+3. **We sent them a notification** – With a dynamic URL so they can go bid away their rent money.
+4. **Users see the magic happen in real-time** – Thanks to `NotificationFeed`. No refresh required. Pure sorcery.
+
+## Final Thoughts (a.k.a. The Part You’ll Skip)
+
+And that’s how you use Sendify to make an actually useful notification system. Of course, this is just an example. You can customize it, overcomplicate it, or completely ignore it. The choice is yours. 🚀

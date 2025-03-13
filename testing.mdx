@@ -1,0 +1,43 @@
+---
+title: "Testing"
+description: "A simple way to test Sendify notifications on the client side."
+---
+
+## Testing Sendify (Because Seeing is Believing)
+
+Want to make sure Sendify actually works? Here’s a **button**. Click it, and watch notifications happen in real-time. No setup, no excuses.
+
+## Client-Side Testing
+
+```tsx
+import { NotificationFeed } from "sendify";
+import { sendify } from "sendify";
+
+const TestingPage = () => {
+  const sendTestNotification = async () => {
+    await sendify.sendNotifications(
+      ["testuser@example.com"], // Hardcoded test user
+      "🚀 This is a test notification!", // Content
+      "Check it out", // Button text (optional)
+      "https://yourapp.com/test" // Button URL (optional)
+    );
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center h-screen gap-4">
+      <NotificationFeed userId="testuser@example.com" />
+      <button 
+        onClick={sendTestNotification} 
+        className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+      >
+        Send Test Notification
+      </button>
+    </div>
+  );
+};
+
+export default TestingPage;
+```
+
+## That’s It.
+Click the button. Watch the magic. If it doesn’t work, well... maybe check your API keys. 😉
